@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/native_ad_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:lines="3"
+        android:textSize="15sp"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum luctus maximus nunc vel hendrerit. Ut eu lectus vitae est dapibus ullamcorper sed ac lorem. Testing"/>
+
+    <com.mopub.mobileads.MoPubView
+        android:id="@+id/mopub_banner"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom" />
+</FrameLayout>

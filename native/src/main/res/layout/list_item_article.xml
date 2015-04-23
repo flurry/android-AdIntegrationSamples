@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="200dp">
+
+    <ImageView
+        android:id="@+id/article_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="false"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/scrim_gradient_bottom_dark"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        style="@style/ListItem">
+        <TextView
+            android:id="@+id/article_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/body_text_inverted"
+            tools:text="@string/sample_short_text"
+            style="@style/ListItemTitle" />
+        <TextView
+            android:id="@+id/article_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/article_title"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/body_text_inverted"
+            tools:text="@string/sample_long_text"
+            style="@style/ListItemText" />
+        <ImageView
+            android:id="@+id/sponsored_image"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@color/loading_image_background"
+            android:layout_marginRight="4dp"
+            android:layout_below="@id/article_content"/>
+        <TextView
+            android:id="@+id/article_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/article_content"
+            android:layout_toRightOf="@id/sponsored_image"
+            android:layout_alignBottom="@id/sponsored_image"
+            android:gravity="center_vertical"
+            android:fontFamily="sans-serif-light"
+            android:textSize="@dimen/text_size_caption"
+            android:textColor="@color/body_text_inverted"
+            tools:text="Sample Name"/>
+        <TextView
+            android:id="@+id/sponsored_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/article_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@id/article_author"
+            android:gravity="center_vertical"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/sponsored_text"
+            android:text="@string/sponsored_string"/>
+    </RelativeLayout>
+</FrameLayout>

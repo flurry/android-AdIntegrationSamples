@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Flurry Mopub Sample</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="sample_short_text">"Lorem ipsum dolor sit amet."</string>
+    <string name="sample_long_text">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent varius justo nunc, consectetur imperdiet metus mollis non. Nam cursus semper mi sed suscipit. Phasellus lectus mauris, pellentesque ac nisi eu, imperdiet congue est."</string>
+    <string name="sponsored_string">SPONSORED</string>
+</resources>

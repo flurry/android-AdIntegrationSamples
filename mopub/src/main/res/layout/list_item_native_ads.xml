@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+    <TextView
+        android:id="@+id/native_ad_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="2dp"
+        android:ellipsize="end"
+        android:gravity="start|center_vertical"
+        android:lines="2"
+        android:textColor="@color/body_text"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        tools:text="Lorem ipsum dolor"/>
+
+    <ImageView
+        android:id="@+id/native_ad_main_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/native_ad_title"
+        android:layout_marginTop="10dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/native_ad_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/native_ad_main_image"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/body_text"
+        android:lines="3"
+        android:textSize="15sp"
+        tools:text="@string/sample_long_text"/>
+
+    <TextView
+        android:id="@+id/native_ad_sponsored_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/sponsored_string"
+        android:textColor="@color/sponsored_text"
+        android:textStyle="normal" />
+
+    <ImageView
+        android:id="@+id/native_ad_icon_image"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true" />
+</RelativeLayout>

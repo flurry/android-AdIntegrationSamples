@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="body_text_inverted">#ffffff</color>
+    <color name="photo_tile_color_overlay">#8333</color>
+    <color name="loading_image_background">#555</color>
+    <color name="placeholder_image_background">#5A00C8</color>
+
+    <color name="sponsored_text">#4CAF50</color>
+</resources>

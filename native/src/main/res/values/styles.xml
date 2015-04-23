@@ -1,0 +1,34 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">#2d1152</item>
+        <item name="colorPrimaryDark">#1C0A33</item>
+        <item name="colorAccent">#03A9F4</item>
+    </style>
+
+    <style name="ListItemContainerBase">
+        <item name="android:paddingLeft">@dimen/keyline_1</item>
+        <item name="android:paddingRight">@dimen/keyline_1</item>
+    </style>
+
+    <style name="ListItem" parent="ListItemContainerBase">
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:minHeight">?android:listPreferredItemHeight</item>
+    </style>
+
+    <style name="ListItemTitle">
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize">@dimen/text_size_large</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:lines">1</item>
+    </style>
+
+    <style name="ListItemText">
+        <item name="android:ellipsize">end</item>
+        <item name="android:lines">3</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+    </style>
+</resources>

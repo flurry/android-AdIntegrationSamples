@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Flurry Banner Sample</string>
+
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
+        viverra elit vitae dolor sollicitudin, vehicula aliquam turpis pharetra. In molestie,
+        sem pharetra tristique fringilla, diam libero placerat orci, eu sodales mauris nunc non
+        velit. Vestibulum consequat augue magna, quis egestas ante semper sit amet. Fusce mollis
+        tempus mollis. Ut volutpat et felis et ultrices. Ut in tempor quam, non viverra sapien.
+        Duis convallis nisi sed mauris aliquam cursus. Donec cursus at mauris semper imperdiet.
+        Donec rutrum eget lorem id semper. Aliquam feugiat rhoncus suscipit. Aliquam tempor
+        tristique dolor, consequat venenatis quam facilisis vel.
+    </string>
+
+    <string name="action_settings">Settings</string>
+    <string name="load_banner_btn">Load standard banner</string>
+</resources>

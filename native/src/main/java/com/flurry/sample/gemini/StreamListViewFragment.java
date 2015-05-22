@@ -29,8 +29,8 @@ public class StreamListViewFragment extends Fragment {
     private ListView mListView;
     private List<NewsArticle> mArticles;
     private final static int ARTICLES_TO_LOAD = 10;
-    private final static int MAX_ADS_TO_FETCH = 3;
-    private final static int MAX_FETCH_ATTEMPT = 4;
+    private final static int MAX_ADS_TO_FETCH = 5;
+    private final static int MAX_FETCH_ATTEMPT = 10;
 
     private static final int VIEW_TYPE_COUNT = 2;
     private static final int VIEW_TYPE_NORMAL = 0;
@@ -355,7 +355,7 @@ public class StreamListViewFragment extends Fragment {
                  Get an ad position that is unique to the given adapter position but is not more
                  than the number of already fetched ads.
                  */
-                int adIndex = (position / INTERVAL_BETWEEN_ADS) - 1;
+                int adIndex = ((position + 1) / (INTERVAL_BETWEEN_ADS + 1)) - 1;
 
                 if (adIndex >= mFetchedNativeAds.size()) { return null; }
 

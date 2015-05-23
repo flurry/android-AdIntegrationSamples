@@ -22,9 +22,19 @@
         android:gravity="bottom"
         style="@style/ListItem">
         <TextView
+            android:id="@+id/sponsored_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/sponsored_text"
+            android:text="@string/sponsored_string"/>
+        <TextView
             android:id="@+id/article_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/sponsored_badge"
             android:textColor="@color/body_text_inverted"
             tools:text="@string/sample_short_text"
             style="@style/ListItemTitle" />
@@ -56,16 +66,16 @@
             android:textSize="@dimen/text_size_caption"
             android:textColor="@color/body_text_inverted"
             tools:text="Sample Name"/>
-        <TextView
-            android:id="@+id/sponsored_badge"
+        <ImageView
+            android:id="@+id/app_rating_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/article_content"
             android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignBottom="@id/article_author"
-            android:gravity="center_vertical"
-            android:fontFamily="sans-serif-medium"
-            android:textColor="@color/sponsored_text"
-            android:text="@string/sponsored_string"/>
+            android:maxHeight="5dp"
+            android:scaleType="fitStart"
+            android:gravity="center_vertical"/>
     </RelativeLayout>
 </FrameLayout>

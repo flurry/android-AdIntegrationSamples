@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.flurry.android.FlurryAgent;
+import com.flurry.android.FlurryAgentListener;
 import com.flurry.android.ads.FlurryAdErrorType;
 import com.flurry.android.ads.FlurryAdNative;
 import com.flurry.android.ads.FlurryAdNativeListener;
@@ -54,6 +56,8 @@ public class StreamListViewFragment extends Fragment {
     private final String AD_ASSET_SOURCE = "source";
     private final String AD_ASSET_SECURE_HQ_IMAGE = "secHqImage";
     private final String AD_ASSET_SECURE_BRAND_LOGO = "secBrandingLogo";
+    // For app-install ads
+    private final String AD_ASSET_SECURE_HQ_RATING_IMAGE = "secHqRatingImg";
     // Other (unused) assets
     @SuppressWarnings("unused")
     private final String AD_ASSET_IMAGE = "image";
@@ -67,6 +71,13 @@ public class StreamListViewFragment extends Fragment {
     private final String AD_ASSET_SECURE_IMAGE = "secImage";
     @SuppressWarnings("unused")
     private final String AD_ASSET_SECURE_HQ_BRAND_LOGO = "secHqBrandingLogo";
+    // Unused for app-install ads
+    @SuppressWarnings("unused")
+    private final String AD_ASSET_SECURE_RATING_IMAGE = "secRatingImg";
+    @SuppressWarnings("unused")
+    private final String AD_ASSET_APP_CATEGORY = "appCategory";
+    @SuppressWarnings("unused")
+    private final String AD_ASSET_APP_RATING = "appRating";
 
 
     public static final StreamListViewFragment newInstance() {
@@ -93,13 +104,22 @@ public class StreamListViewFragment extends Fragment {
         mArticles = new ArrayList<>(ARTICLES_TO_LOAD);
 
         loadArticles();
-        fetchNewAds();
+        // This listener is registered before Activity#onStart() may be called in the lifecycle
+        FlurryAgent.setFlurryAgentListener(new FlurryAgentListener() {
+            @Override
+            public void onSessionStarted() {
+                // Only fetch new ads after session has started
+                Log.i(TAG, "Session started with ID " + FlurryAgent.getSessionId());
+                fetchNewAds();
+            }
+        });
     }
 
     private void fetchNewAds() {
         // Create a new native ad and add it to a list of ads that are currently being fetched
         Log.i(TAG, "Trying to fetch new ad");
         if (mNativeAdsToFetch.size() < MAX_ADS_TO_FETCH) {
+            // For native ads, you can also use Application context (Context#getApplicationContext())
             FlurryAdNative flurryAdNative = new FlurryAdNative(getActivity(), AD_SPACE_NAME);
             flurryAdNative.setListener(mNativeAdListener);
             flurryAdNative.fetchAd();
@@ -239,9 +259,15 @@ public class StreamListViewFragment extends Fragment {
                         adHolder.adTitle = (TextView)convertView.findViewById(R.id.article_title);
                         adHolder.adSummary = (TextView)convertView.findViewById(R.id.article_content);
                         adHolder.publisher = (TextView)convertView.findViewById(R.id.article_author);
+                        adHolder.appRatingImg = (ImageView)convertView.findViewById(R.id.app_rating_image);
                         adHolder.sponsoredImage = (ImageView)convertView.findViewById(R.id.sponsored_image);
 
-                        // Clear the viewHolder content
+                        adHolder.adImage.setColorFilter(
+                                new PorterDuffColorFilter(
+                                        getResources().getColor(R.color.photo_tile_color_overlay),
+                                        PorterDuff.Mode.SRC_ATOP));
+
+                        // Hide article-specific views
                         adHolder.sponsoredImage.setVisibility(View.VISIBLE);
                         adHolder.adImage.setImageResource(R.color.loading_image_background);
 
@@ -252,18 +278,31 @@ public class StreamListViewFragment extends Fragment {
                     }
                     FlurryAdNative useableNativeAd = getUseableAd(position);
 
-                    adHolder.adNative = useableNativeAd;
-                    useableNativeAd.setTrackingView(convertView);
+                    if (useableNativeAd != null) {
+                        adHolder.adNative = useableNativeAd;
+                        useableNativeAd.setTrackingView(convertView);
 
-                    // Show an ad
-                    useableNativeAd.getAsset(AD_ASSET_HEADLINE).loadAssetIntoView(adHolder.adTitle);
-                    useableNativeAd.getAsset(AD_ASSET_SUMMARY).loadAssetIntoView(adHolder.adSummary);
-                    useableNativeAd.getAsset(AD_ASSET_SOURCE).loadAssetIntoView(adHolder.publisher);
-                    useableNativeAd.getAsset(AD_ASSET_SECURE_HQ_IMAGE).loadAssetIntoView(adHolder.adImage);
-                    useableNativeAd.getAsset(AD_ASSET_SECURE_BRAND_LOGO).loadAssetIntoView(
-                            adHolder.sponsoredImage);
+                        // Show an ad
+                        useableNativeAd.getAsset(AD_ASSET_HEADLINE).loadAssetIntoView(adHolder.adTitle);
+                        useableNativeAd.getAsset(AD_ASSET_SUMMARY).loadAssetIntoView(adHolder.adSummary);
+                        useableNativeAd.getAsset(AD_ASSET_SOURCE).loadAssetIntoView(adHolder.publisher);
+                        useableNativeAd.getAsset(AD_ASSET_SECURE_HQ_IMAGE).loadAssetIntoView(adHolder.adImage);
+                        useableNativeAd.getAsset(AD_ASSET_SECURE_BRAND_LOGO).loadAssetIntoView(
+                                adHolder.sponsoredImage);
+                        if (useableNativeAd.getAsset(AD_ASSET_SECURE_HQ_RATING_IMAGE) != null) {
+                            adHolder.appRatingImg.findViewById(R.id.app_rating_image)
+                                    .setVisibility(View.VISIBLE);
+                            useableNativeAd.getAsset(AD_ASSET_SECURE_HQ_RATING_IMAGE)
+                                    .loadAssetIntoView(adHolder.appRatingImg);
+                        } else {
+                            adHolder.appRatingImg.findViewById(R.id.app_rating_image).setVisibility(View.GONE);
+                        }
 
-                    useableNativeAd.setTrackingView(convertView);
+                        useableNativeAd.setTrackingView(convertView);
+                    } else {
+                        // The ad is expired, hence unusable. Remove it from our collection
+                        removeAd(position);
+                    }
                     break;
                 case VIEW_TYPE_NORMAL:
                     Log.i(TAG, "Placing data in ListView");
@@ -284,14 +323,10 @@ public class StreamListViewFragment extends Fragment {
                         viewHolder.articleImageView = (ImageView)convertView.findViewById(
                                 R.id.article_image);
 
-                        viewHolder.articleImageView.setColorFilter(
-                                new PorterDuffColorFilter(
-                                        getResources().getColor(R.color.photo_tile_color_overlay),
-                                        PorterDuff.Mode.SRC_ATOP));
-
-                        // Clear the viewHolder content
+                        // Hide ad-specific views
                         convertView.findViewById(R.id.sponsored_badge).setVisibility(View.INVISIBLE);
                         convertView.findViewById(R.id.sponsored_image).setVisibility(View.GONE);
+                        convertView.findViewById(R.id.app_rating_image).setVisibility(View.GONE);
 
                         convertView.setTag(viewHolder);
                     } else {
@@ -351,11 +386,8 @@ public class StreamListViewFragment extends Fragment {
         private FlurryAdNative getUseableAd(int position) {
             if ((position + 1) % (INTERVAL_BETWEEN_ADS +1) == 0 &&
                     mFetchedNativeAds != null && mFetchedNativeAds.size() > 0) {
-                /*
-                 Get an ad position that is unique to the given adapter position but is not more
-                 than the number of already fetched ads.
-                 */
-                int adIndex = ((position + 1) / (INTERVAL_BETWEEN_ADS + 1)) - 1;
+
+                int adIndex = getAdIndex(position);
 
                 if (adIndex >= mFetchedNativeAds.size()) { return null; }
 
@@ -368,6 +400,31 @@ public class StreamListViewFragment extends Fragment {
 
             return null;
         }
+
+        /**
+         * Get an ad position that is unique to the given adapter position but is not more than the
+         * number of already fetched ads.
+         *
+         * @param position The position in the list that the ad would be placed at.
+         * @return the index position of the ad in the ad collection
+         */
+        private int getAdIndex(int position) {
+            return ((position + 1) / (INTERVAL_BETWEEN_ADS + 1)) - 1;
+        }
+
+        /**
+         * Removes the ad from the ad list. This would occur when the app detects that the ad is expired.
+         *
+         * It should ideally be called only after <code>getUseableAd(int)</code> returns null.
+         *
+         * @param position The position in the list that the ad would be placed at.
+         */
+        private void removeAd(int position) {
+            int adIndex = getAdIndex(position);
+            mFetchedNativeAds.remove(adIndex);
+
+            notifyDataSetChanged();
+        }
     }
 
     /**
@@ -376,7 +433,7 @@ public class StreamListViewFragment extends Fragment {
      * @return <code>true</code> if ad object is useable, false otherwise
      */
     private boolean isAdUseable(FlurryAdNative adNative) {
-        return adNative.isReady() &&
+        return adNative.isReady() && !adNative.isExpired() &&
                 adNative.getAsset(AD_ASSET_HEADLINE) != null &&
                 adNative.getAsset(AD_ASSET_SUMMARY) != null &&
                 adNative.getAsset(AD_ASSET_SECURE_HQ_IMAGE) != null;
@@ -395,6 +452,7 @@ public class StreamListViewFragment extends Fragment {
         TextView adSummary;
         TextView publisher;
         ImageView sponsoredImage;
+        ImageView appRatingImg;
         FlurryAdNative adNative;
     }
 }

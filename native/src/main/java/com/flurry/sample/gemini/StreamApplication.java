@@ -6,7 +6,8 @@ import com.flurry.android.FlurryAgent;
 
 public class StreamApplication extends Application {
 
-    private static final String FLURRY_APIKEY = "YOUR_FLURRY_API_KEY";
+    // NOTE: Use your own Flurry API key. This is left here to make sample review easier
+    private static final String FLURRY_APIKEY = "JQVT87W7TGN5W7SWY2FH";
 
     @Override
     public void onCreate() {

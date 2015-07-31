@@ -3,7 +3,7 @@ Flurry Interstitial (full-screen) Ad Integration
 
 This module shows how to integrate various kinds of interstitial ads into your apps using Flurry.
 
-For this sample, a trial API key and various ad space names are already configured. Do not forget
+For this sample, a test API key and various ad space names are already configured. Do not forget
 to change the ad space name and API key if copying code from here.
 
 The various interstitial configurations in this sample are:

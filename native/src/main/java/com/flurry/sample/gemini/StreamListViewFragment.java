@@ -1,5 +1,6 @@
 package com.flurry.sample.gemini;
 
+import android.annotation.SuppressLint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
@@ -30,7 +31,7 @@ public class StreamListViewFragment extends Fragment {
 
     private ListView mListView;
     private List<NewsArticle> mArticles;
-    private final static int ARTICLES_TO_LOAD = 10;
+    private final static int ARTICLES_TO_LOAD = 20;
     private final static int MAX_ADS_TO_FETCH = 5;
     private final static int MAX_FETCH_ATTEMPT = 10;
 
@@ -39,17 +40,21 @@ public class StreamListViewFragment extends Fragment {
     private static final int VIEW_TYPE_AD = 1;
 
     private int mFetchAttempts;
-    /**
-     * List containing ads that are currently being fetched
+    /*
+     List containing ads that are currently being fetched. Hold them to prevent GC while the ad
+     request is being fulfilled.
      */
     private List<FlurryAdNative> mNativeAdsToFetch;
-    /**
-     * List containing ads that have been successfully fetched
-     */
+    // List containing ads that have been successfully fetched
     private List<FlurryAdNative> mFetchedNativeAds;
     private NativeAdListener mNativeAdListener = new NativeAdListener();
 
-    private static final String AD_SPACE_NAME = "YOUR_FLURRY_AD_SPACE_NAME";
+    /*
+    One ad space can fetch either static or video native ads if enabled on Flurry dashboard.
+
+    NOTE: Use your own Flurry ad space. This is left here to make sample review easier
+     */
+    private static final String AD_SPACE_NAME = "StaticVideoNativeTest";
 
     private final String AD_ASSET_SUMMARY = "summary";
     private final String AD_ASSET_HEADLINE = "headline";
@@ -58,6 +63,8 @@ public class StreamListViewFragment extends Fragment {
     private final String AD_ASSET_SECURE_BRAND_LOGO = "secBrandingLogo";
     // For app-install ads
     private final String AD_ASSET_SECURE_HQ_RATING_IMAGE = "secHqRatingImg";
+    // For native video ads
+    private final String AD_ASSET_VIDEO_URL = "videoUrl";
     // Other (unused) assets
     @SuppressWarnings("unused")
     private final String AD_ASSET_IMAGE = "image";
@@ -115,12 +122,34 @@ public class StreamListViewFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (getActivity().isFinishing()) {
+            for (FlurryAdNative adNative : mNativeAdsToFetch) {
+                adNative.destroy();
+            }
+
+            for (FlurryAdNative adNative : mFetchedNativeAds) {
+                adNative.destroy();
+            }
+            mNativeAdsToFetch.clear();
+            mFetchedNativeAds.clear();
+        }
+    }
+
     private void fetchNewAds() {
         // Create a new native ad and add it to a list of ads that are currently being fetched
         Log.i(TAG, "Trying to fetch new ad");
         if (mNativeAdsToFetch.size() < MAX_ADS_TO_FETCH) {
-            // For native ads, you can also use Application context (Context#getApplicationContext())
-            FlurryAdNative flurryAdNative = new FlurryAdNative(getActivity(), AD_SPACE_NAME);
+            /*
+             For native ads, you can use either application context (Context#getApplicationContext())
+             or activity context. To support pause & resume of native video ads, use application
+             context.
+             */
+            FlurryAdNative flurryAdNative = new FlurryAdNative(
+                    getActivity().getApplicationContext(), AD_SPACE_NAME);
             flurryAdNative.setListener(mNativeAdListener);
             flurryAdNative.fetchAd();
             mNativeAdsToFetch.add(flurryAdNative);
@@ -241,6 +270,7 @@ public class StreamListViewFragment extends Fragment {
             return true; // Underlying data set is not changing anyway
         }
 
+        @SuppressLint("CutPasteId")
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -252,13 +282,14 @@ public class StreamListViewFragment extends Fragment {
 
                     if (convertView == null) {
                         convertView = getActivity().getLayoutInflater()
-                                .inflate(R.layout.list_item_article, parent, false);
+                                .inflate(R.layout.list_item_ad, parent, false);
 
                         adHolder = new AdViewHolder();
-                        adHolder.adImage = (ImageView)convertView.findViewById(R.id.article_image);
-                        adHolder.adTitle = (TextView)convertView.findViewById(R.id.article_title);
-                        adHolder.adSummary = (TextView)convertView.findViewById(R.id.article_content);
-                        adHolder.publisher = (TextView)convertView.findViewById(R.id.article_author);
+                        adHolder.adImage = (ImageView)convertView.findViewById(R.id.ad_image);
+                        adHolder.adVideo = (ViewGroup)convertView.findViewById(R.id.ad_video);
+                        adHolder.adTitle = (TextView)convertView.findViewById(R.id.ad_headline);
+                        adHolder.adSummary = (TextView)convertView.findViewById(R.id.ad_description);
+                        adHolder.publisher = (TextView)convertView.findViewById(R.id.ad_source);
                         adHolder.appRatingImg = (ImageView)convertView.findViewById(R.id.app_rating_image);
                         adHolder.sponsoredImage = (ImageView)convertView.findViewById(R.id.sponsored_image);
 
@@ -266,10 +297,6 @@ public class StreamListViewFragment extends Fragment {
                                 new PorterDuffColorFilter(
                                         getResources().getColor(R.color.photo_tile_color_overlay),
                                         PorterDuff.Mode.SRC_ATOP));
-
-                        // Hide article-specific views
-                        adHolder.sponsoredImage.setVisibility(View.VISIBLE);
-                        adHolder.adImage.setImageResource(R.color.loading_image_background);
 
                         convertView.setTag(adHolder);
                     } else {
@@ -286,9 +313,20 @@ public class StreamListViewFragment extends Fragment {
                         useableNativeAd.getAsset(AD_ASSET_HEADLINE).loadAssetIntoView(adHolder.adTitle);
                         useableNativeAd.getAsset(AD_ASSET_SUMMARY).loadAssetIntoView(adHolder.adSummary);
                         useableNativeAd.getAsset(AD_ASSET_SOURCE).loadAssetIntoView(adHolder.publisher);
-                        useableNativeAd.getAsset(AD_ASSET_SECURE_HQ_IMAGE).loadAssetIntoView(adHolder.adImage);
                         useableNativeAd.getAsset(AD_ASSET_SECURE_BRAND_LOGO).loadAssetIntoView(
                                 adHolder.sponsoredImage);
+                        if (useableNativeAd.isVideoAd()) {
+                            useableNativeAd.getAsset(AD_ASSET_VIDEO_URL).loadAssetIntoView(adHolder.adVideo);
+                            adHolder.adImage.setVisibility(View.GONE);
+                            adHolder.adVideo.setVisibility(View.VISIBLE);
+
+                            adHolder.adVideo.requestLayout();
+
+                        } else if (useableNativeAd.getAsset(AD_ASSET_SECURE_HQ_IMAGE) != null) {
+                            useableNativeAd.getAsset(AD_ASSET_SECURE_HQ_IMAGE).loadAssetIntoView(adHolder.adImage);
+                            adHolder.adVideo.setVisibility(View.GONE);
+                            adHolder.adImage.setVisibility(View.VISIBLE);
+                        }
                         if (useableNativeAd.getAsset(AD_ASSET_SECURE_HQ_RATING_IMAGE) != null) {
                             adHolder.appRatingImg.findViewById(R.id.app_rating_image)
                                     .setVisibility(View.VISIBLE);
@@ -322,11 +360,6 @@ public class StreamListViewFragment extends Fragment {
                                 R.id.article_author);
                         viewHolder.articleImageView = (ImageView)convertView.findViewById(
                                 R.id.article_image);
-
-                        // Hide ad-specific views
-                        convertView.findViewById(R.id.sponsored_badge).setVisibility(View.INVISIBLE);
-                        convertView.findViewById(R.id.sponsored_image).setVisibility(View.GONE);
-                        convertView.findViewById(R.id.app_rating_image).setVisibility(View.GONE);
 
                         convertView.setTag(viewHolder);
                     } else {
@@ -368,7 +401,7 @@ public class StreamListViewFragment extends Fragment {
          * Translates a given position to the original position in the underlying dataset,
          * assuming no ads were present.
          * @param position the position to translate
-         * @return
+         * @return the original position from the underlying dataset
          */
         private int getOriginalContentPosition(int position) {
             int noOfFetchedAds = mFetchedNativeAds.size();
@@ -428,7 +461,7 @@ public class StreamListViewFragment extends Fragment {
     }
 
     /**
-     * Checks if an ad object is ready ad useable.
+     * Checks if an ad object is ready and useable.
      * @param adNative the {@link com.flurry.android.ads.FlurryAdNative} object to check
      * @return <code>true</code> if ad object is useable, false otherwise
      */
@@ -448,6 +481,7 @@ public class StreamListViewFragment extends Fragment {
 
     private static class AdViewHolder {
         ImageView adImage;
+        ViewGroup adVideo;
         TextView adTitle;
         TextView adSummary;
         TextView publisher;

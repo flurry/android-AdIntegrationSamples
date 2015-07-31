@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.flurry.android.ads.FlurryAdErrorType;
 import com.flurry.android.ads.FlurryAdInterstitial;
@@ -14,13 +16,27 @@ public class InterstitialOnExitActivity extends ActionBarActivity {
     private final static String TAG = InterstitialOnExitActivity.class.getSimpleName();
 
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interstitial_on_exit);
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                showTransitionAd();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onBackPressed() {
+        showTransitionAd();
+    }
+
+    private void showTransitionAd() {
         FlurryAdInterstitial flurryAdInterstitial = new FlurryAdInterstitial(this, "InterstitialTest");
         flurryAdInterstitial.setListener(new FlurryAdInterstitialListener() {
             @Override
@@ -41,7 +57,7 @@ public class InterstitialOnExitActivity extends ActionBarActivity {
 
             @Override
             public void onClose(FlurryAdInterstitial flurryAdInterstitial) {
-                InterstitialOnExitActivity.super.onBackPressed();
+                InterstitialOnExitActivity.this.finish();
             }
 
             @Override
@@ -63,6 +79,8 @@ public class InterstitialOnExitActivity extends ActionBarActivity {
             public void onError(FlurryAdInterstitial flurryAdInterstitial,
                                 FlurryAdErrorType flurryAdErrorType, int i) {
                 Log.e(TAG, "Full screen ad load error - Error type: " + flurryAdErrorType + " Code: " + i);
+                Toast.makeText(InterstitialOnExitActivity.this, "Ad load failed", Toast.LENGTH_SHORT).show();
+                InterstitialOnExitActivity.this.finish();
             }
         });
         flurryAdInterstitial.fetchAd();

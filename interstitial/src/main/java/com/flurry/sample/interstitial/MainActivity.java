@@ -40,6 +40,7 @@ public class MainActivity extends ActionBarActivity {
                         new SimpleAdSpaceConfig("Skippable video ad", "SkippableVideoTest"),
                         new SimpleAdSpaceConfig("Unskippable video ad", "UnskippableVideoTest"),
                         new SimpleAdSpaceConfig("Client-side rewarded ad", "ClientSideRewardedAd"),
+                        new SimpleAdSpaceConfig("Test-mode video ad", "TestModeVideoTest"),
                         new SimpleAdSpaceConfig("Interstitial on Activity finish", "InterstitialTest"),
                 })
         ) {
@@ -61,7 +62,7 @@ public class MainActivity extends ActionBarActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 4) {
+                if (position == 5) {
                     Intent intent = new Intent(MainActivity.this, InterstitialOnExitActivity.class);
                     startActivity(intent);
                 } else {
@@ -70,12 +71,18 @@ public class MainActivity extends ActionBarActivity {
                     mFlurryAdInterstitial = new FlurryAdInterstitial(MainActivity.this, clickedAdSpaceName);
                     mFlurryAdInterstitial.setListener(mAdInterstitialListener);
 
+                    if (position == 4) { // Enable test-mode for consistent ad fill.
+                        FlurryAdTargeting testTarget = new FlurryAdTargeting();
+                        testTarget.setEnableTestAds(true);
+                        mFlurryAdInterstitial.setTargeting(testTarget);
+                    }
+
                     mFlurryAdInterstitial.fetchAd();
 
                     mListView.setEnabled(false);
-                }
 
-                Toast.makeText(MainActivity.this, "Please wait for ad", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Please wait for ad", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="This will show an interstitial ad when you exit go back from this Activity"/>
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:text="@string/activity_finish_description"/>
 
 </FrameLayout>

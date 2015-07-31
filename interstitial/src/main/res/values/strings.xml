@@ -3,4 +3,5 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="activity_finish_description">This should show an interstitial ad after you press the back button</string>
 </resources>

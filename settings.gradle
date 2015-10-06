@@ -1,2 +1,1 @@
-include ':banner', ':interstitial', ':mopub', ':native', ':mopub-sdk', ':common-lib'
-project(':mopub-sdk').projectDir = new File('mopub-android-sdk/mopub-sdk')
+include ':banner', ':interstitial', ':mopub', ':native', ':common-lib'

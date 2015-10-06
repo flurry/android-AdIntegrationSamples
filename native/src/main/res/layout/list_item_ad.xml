@@ -40,33 +40,34 @@
         android:textStyle="bold"
         tools:text="Sample Ad Headline"/>
 
-    <ImageView
-        android:id="@+id/ad_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginRight="-10dp"
-        android:layout_below="@id/ad_headline"
-        android:layout_centerHorizontal="true"
-        android:adjustViewBounds="true"
-        android:scaleType="centerCrop"/>
-
     <FrameLayout
-        android:id="@+id/ad_video"
+        android:id="@+id/ad_media"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="-10dp"
         android:layout_marginRight="-10dp"
         android:layout_below="@id/ad_headline"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true">
+        <ImageView
+            android:id="@+id/ad_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"/>
+
+        <FrameLayout
+            android:id="@+id/ad_video"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </FrameLayout>
+
 
     <TextView
         android:id="@+id/ad_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ad_image"
+        android:layout_below="@id/ad_media"
         android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-light"
         android:maxLines="3"

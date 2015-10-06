@@ -20,6 +20,7 @@ import com.flurry.android.FlurryAgentListener;
 import com.flurry.android.ads.FlurryAdErrorType;
 import com.flurry.android.ads.FlurryAdNative;
 import com.flurry.android.ads.FlurryAdNativeListener;
+import com.flurry.android.ads.FlurryAdTargeting;
 import com.flurry.sample.gemini.entities.NewsArticle;
 
 import java.util.ArrayList;
@@ -151,6 +152,10 @@ public class StreamListViewFragment extends Fragment {
             FlurryAdNative flurryAdNative = new FlurryAdNative(
                     getActivity().getApplicationContext(), AD_SPACE_NAME);
             flurryAdNative.setListener(mNativeAdListener);
+            // Enable test mode (test ads cannot be monetized)
+            FlurryAdTargeting testModeTargeting = new FlurryAdTargeting();
+            testModeTargeting.setEnableTestAds(true);
+            flurryAdNative.setTargeting(testModeTargeting);
             flurryAdNative.fetchAd();
             mNativeAdsToFetch.add(flurryAdNative);
         }
@@ -320,7 +325,7 @@ public class StreamListViewFragment extends Fragment {
                             adHolder.adImage.setVisibility(View.GONE);
                             adHolder.adVideo.setVisibility(View.VISIBLE);
 
-                            adHolder.adVideo.requestLayout();
+                            convertView.requestLayout();
 
                         } else if (useableNativeAd.getAsset(AD_ASSET_SECURE_HQ_IMAGE) != null) {
                             useableNativeAd.getAsset(AD_ASSET_SECURE_HQ_IMAGE).loadAssetIntoView(adHolder.adImage);

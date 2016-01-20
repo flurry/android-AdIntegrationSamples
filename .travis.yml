@@ -8,6 +8,13 @@
 # 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 # 3. This notice may not be removed or altered from any source distribution.
 
+git:
+  submodules: false
+
+before_install:
+    - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+    - git submodule update --init --recursive
+
 language: android
 
 android:

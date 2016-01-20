@@ -45,7 +45,6 @@ public class FlurryCustomEventInterstitial extends com.mopub.mobileads.CustomEve
 
         if (listener == null) {
             Log.e(LOG_TAG, "CustomEventInterstitialListener cannot be null.");
-            listener.onInterstitialFailed(ADAPTER_CONFIGURATION_ERROR);
             return;
         }
 

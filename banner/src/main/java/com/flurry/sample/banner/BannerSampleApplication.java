@@ -14,7 +14,7 @@ public class BannerSampleApplication extends Application {
         FlurryAgent.setLogEnabled(false);
         FlurryAgent.setLogLevel(Log.VERBOSE);
         FlurryAgent.setLogEvents(true);
-        FlurryAgent.init(this, "YOUR_FLURRY_API_KEY");
+        FlurryAgent.init(this, "JQVT87W7TGN5W7SWY2FH");
         Log.i(TAG, "Flurry SDK initialized");
     }
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/keyline_1"
+        android:paddingBottom="@dimen/keyline_1">
+        <Button
+            android:id="@+id/fetch_ad_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_text_fetch_ad"/>
+        <Button
+            android:id="@+id/render_ad_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_text_render_ad"
+            android:enabled="false"/>
+    </LinearLayout>
+    <include layout="@layout/list_item_ad"/>
+</LinearLayout>

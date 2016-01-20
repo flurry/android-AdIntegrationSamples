@@ -5,4 +5,10 @@
     <string name="sample_short_text">"Lorem ipsum dolor sit amet."</string>
     <string name="sample_long_text">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent varius justo nunc, consectetur imperdiet metus mollis non. Nam cursus semper mi sed suscipit. Phasellus lectus mauris, pellentesque ac nisi eu, imperdiet congue est."</string>
     <string name="sponsored_string">SPONSORED</string>
+
+    <string name="button_text_fetch_ad">Fetch ad</string>
+    <string name="button_text_render_ad">Render ad</string>
+
+    <string name="default_cta">Learn more</string>
+    <string name="collapse_ad">Collapse ▲</string>
 </resources>

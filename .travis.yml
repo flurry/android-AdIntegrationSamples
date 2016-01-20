@@ -9,3 +9,14 @@
 # 3. This notice may not be removed or altered from any source distribution.
 
 language: android
+
+android:
+  components:
+    - tools
+    - platform-tools
+    - build-tools-23.0.2
+    - android-23
+    - extra-android-m2repository
+    - extra-google-m2repository
+
+script: ./gradlew build

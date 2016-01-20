@@ -1,0 +1,3 @@
+[submodule "StreamAds-Android"]
+	path = StreamAds-Android
+	url = git@github.com:flurry/StreamAds-Android.git

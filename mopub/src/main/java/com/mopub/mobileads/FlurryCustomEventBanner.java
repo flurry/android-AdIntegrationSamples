@@ -47,7 +47,6 @@ public class FlurryCustomEventBanner extends com.mopub.mobileads.CustomEventBann
 
         if (listener == null) {
             Log.e(LOG_TAG, "CustomEventBannerListener cannot be null.");
-            listener.onBannerFailed(ADAPTER_CONFIGURATION_ERROR);
             return;
         }
 

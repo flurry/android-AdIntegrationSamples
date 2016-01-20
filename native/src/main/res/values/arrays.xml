@@ -18,24 +18,6 @@
         <item>A seal sweeps within the song!</item>
     </string-array>
 
-    <string-array name="article_contents">
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et magna risus. Sed porta, nisl quis euismod convallis, nibh tortor bibendum odio, et elementum tortor enim a lorem. Sed id dui at massa elementum fringilla. Donec interdum, tortor quis volutpat molestie, est mauris volutpat odio, sit amet faucibus augue velit.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et magna risus. Sed porta, nisl quis euismod convallis, nibh tortor bibendum odio, et elementum tortor enim a lorem. Sed id dui at massa elementum fringilla. Donec interdum, tortor quis volutpat molestie, est mauris volutpat odio, sit amet faucibus augue velit.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et magna risus. Sed porta, nisl quis euismod convallis, nibh tortor bibendum odio, et elementum tortor enim a lorem. Sed id dui at massa elementum fringilla. Donec interdum, tortor quis volutpat molestie, est mauris volutpat odio, sit amet faucibus augue velit.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et magna risus. Sed porta, nisl quis euismod convallis, nibh tortor bibendum odio, et elementum tortor enim a lorem. Sed id dui at massa elementum fringilla. Donec interdum, tortor quis volutpat molestie, est mauris volutpat odio, sit amet faucibus augue velit.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et magna risus. Sed porta, nisl quis euismod convallis, nibh tortor bibendum odio, et elementum tortor enim a lorem. Sed id dui at massa elementum fringilla. Donec interdum, tortor quis volutpat molestie, est mauris volutpat odio, sit amet faucibus augue velit.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et magna risus. Sed porta, nisl quis euismod convallis, nibh tortor bibendum odio, et elementum tortor enim a lorem. Sed id dui at massa elementum fringilla. Donec interdum, tortor quis volutpat molestie, est mauris volutpat odio, sit amet faucibus augue velit.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et magna risus. Sed porta, nisl quis euismod convallis, nibh tortor bibendum odio, et elementum tortor enim a lorem. Sed id dui at massa elementum fringilla. Donec interdum, tortor quis volutpat molestie, est mauris volutpat odio, sit amet faucibus augue velit.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et magna risus. Sed porta, nisl quis euismod convallis, nibh tortor bibendum odio, et elementum tortor enim a lorem. Sed id dui at massa elementum fringilla. Donec interdum, tortor quis volutpat molestie, est mauris volutpat odio, sit amet faucibus augue velit.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et magna risus. Sed porta, nisl quis euismod convallis, nibh tortor bibendum odio, et elementum tortor enim a lorem. Sed id dui at massa elementum fringilla. Donec interdum, tortor quis volutpat molestie, est mauris volutpat odio, sit amet faucibus augue velit.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et magna risus. Sed porta, nisl quis euismod convallis, nibh tortor bibendum odio, et elementum tortor enim a lorem. Sed id dui at massa elementum fringilla. Donec interdum, tortor quis volutpat molestie, est mauris volutpat odio, sit amet faucibus augue velit.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et magna risus. Sed porta, nisl quis euismod convallis, nibh tortor bibendum odio, et elementum tortor enim a lorem. Sed id dui at massa elementum fringilla. Donec interdum, tortor quis volutpat molestie, est mauris volutpat odio, sit amet faucibus augue velit.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et magna risus. Sed porta, nisl quis euismod convallis, nibh tortor bibendum odio, et elementum tortor enim a lorem. Sed id dui at massa elementum fringilla. Donec interdum, tortor quis volutpat molestie, est mauris volutpat odio, sit amet faucibus augue velit.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et magna risus. Sed porta, nisl quis euismod convallis, nibh tortor bibendum odio, et elementum tortor enim a lorem. Sed id dui at massa elementum fringilla. Donec interdum, tortor quis volutpat molestie, est mauris volutpat odio, sit amet faucibus augue velit.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et magna risus. Sed porta, nisl quis euismod convallis, nibh tortor bibendum odio, et elementum tortor enim a lorem. Sed id dui at massa elementum fringilla. Donec interdum, tortor quis volutpat molestie, est mauris volutpat odio, sit amet faucibus augue velit.</item>
-        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et magna risus. Sed porta, nisl quis euismod convallis, nibh tortor bibendum odio, et elementum tortor enim a lorem. Sed id dui at massa elementum fringilla. Donec interdum, tortor quis volutpat molestie, est mauris volutpat odio, sit amet faucibus augue velit.</item>
-    </string-array>
-
     <!-- From http://www.behindthename.com/random/random.php -->
     <string-array name="article_authors">
         <item>Gabrielius Enitan</item>
@@ -54,4 +36,11 @@
         <item>Brigitte Richard</item>
         <item>Zdislav Alyce</item>
     </string-array>
+
+    <string-array name="native_ad_types">
+        <item>Single native ad</item>
+        <item>Native ads in a list</item>
+        <item>Expandable Native ads</item>
+    </string-array>
+
 </resources>

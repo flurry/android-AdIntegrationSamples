@@ -1,7 +1,7 @@
 package com.flurry.sample.banner;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,7 +12,7 @@ import com.flurry.android.ads.FlurryAdBanner;
 import com.flurry.android.ads.FlurryAdBannerListener;
 import com.flurry.android.ads.FlurryAdErrorType;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     public static final String STATE_PERSIST_STANDARD = "com.flurry.sample.banner.persiststandard";
     private FlurryAdBanner mFlurryAdStandardBanner = null;
@@ -87,7 +87,7 @@ public class MainActivity extends ActionBarActivity {
     private void loadStandardBanner() {
         ViewGroup bannerAdLayout = (ViewGroup) findViewById(R.id.banner_layout);
         mFlurryAdStandardBanner = new FlurryAdBanner(MainActivity.this, bannerAdLayout,
-                "YOUR_AD_SPACE_NAME");
+                "StandardBannerTestAd");
         mFlurryAdStandardBanner.setListener(mAdBannerListener);
         Log.i(TAG, "Fetching banner ad");
 

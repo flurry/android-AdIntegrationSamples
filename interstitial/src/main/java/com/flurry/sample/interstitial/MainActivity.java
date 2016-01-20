@@ -1,8 +1,8 @@
 package com.flurry.sample.interstitial;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,7 +21,7 @@ import com.flurry.android.ads.FlurryAdTargeting;
 
 import java.util.Arrays;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     FlurryAdInterstitial mFlurryAdInterstitial;
     ListView mListView;

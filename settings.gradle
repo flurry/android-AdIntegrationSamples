@@ -1,1 +1,2 @@
-include ':banner', ':interstitial', ':mopub', ':native', ':common-lib'
+include ':banner', ':interstitial', ':mopub', ':native', ':streamads-lib'
+project(':streamads-lib').projectDir = new File('StreamAds-Android/lib-adapter')

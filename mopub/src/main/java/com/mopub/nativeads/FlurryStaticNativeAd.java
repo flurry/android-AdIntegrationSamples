@@ -1,6 +1,7 @@
 package com.mopub.nativeads;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,22 +16,37 @@ import com.mopub.mobileads.FlurryAgentWrapper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlurryForwardingNativeAd extends BaseForwardingNativeAd {
+public class FlurryStaticNativeAd extends StaticNativeAd {
 
-    private static final String kLogTag = FlurryForwardingNativeAd.class.getSimpleName();
+    private static final String kLogTag = FlurryStaticNativeAd.class.getSimpleName();
     private static final int IMPRESSION_VIEW_MIN_TIME = 1000;
+    private static final String CALL_TO_ACTION = "callToAction";
 
     private final Context mContext;
     private final CustomEventNative.CustomEventNativeListener mCustomEventNativeListener;
-    private final FlurryForwardingNativeAd mFlurryForwardingNativeAd;
+    private final FlurryStaticNativeAd mFlurryStaticNativeAd;
+
+    private static final String ASSET_SEC_HQ_IMAGE = "secHqImage";
+    private static final String ASSET_SEC_IMAGE = "secImage";
+    private static final String ASSET_SEC_HQ_RATING_IMG = "secHqRatingImg";
+    private static final String ASSET_SEC_RATING_IMG = "secRatingImg";
+    private static final String ASSET_APP_RATING = "appRating";
+    private static final String ASSET_APP_CATEGORY = "appCategory";
+    private static final String ASSET_HEADLINE = "headline";
+    private static final String ASSET_SUMMARY = "summary";
+    private static final double MOPUB_STAR_RATING_SCALE = StaticNativeAd.MAX_STAR_RATING;
+
+    public static final String EXTRA_STAR_RATING_IMG = "starratingimage";
+    public static final String EXTRA_APP_CATEGORY = "appcategory";
 
     private FlurryAdNative nativeAd;
 
-    FlurryForwardingNativeAd(Context context, FlurryAdNative adNative, CustomEventNative.CustomEventNativeListener mCustomEventNativeListener) {
+    FlurryStaticNativeAd(Context context, FlurryAdNative adNative,
+                         CustomEventNative.CustomEventNativeListener mCustomEventNativeListener) {
         this.mContext = context;
         this.nativeAd = adNative;
         this.mCustomEventNativeListener = mCustomEventNativeListener;
-        this.mFlurryForwardingNativeAd = this;
+        this.mFlurryStaticNativeAd = this;
     }
 
     public synchronized void fetchAd() {
@@ -46,13 +62,15 @@ public class FlurryForwardingNativeAd extends BaseForwardingNativeAd {
 
     private synchronized void onFetched(FlurryAdNative adNative) {
         if (adNative != null) {
-            Log.d(kLogTag, "FlurryForwardingNativeAd onFetched: Native Ad fetched successfully! "+ adNative.toString());
+            Log.d(kLogTag, "onFetched: Native Ad fetched successfully!"
+                    + adNative.toString());
             setupNativeAd(adNative);
         }
     }
 
     private synchronized void onFetchFailed(FlurryAdNative adNative) {
-        Log.d(kLogTag, "FlurryForwardingNativeAd onFetchFailed: Native ad not available. " + adNative.toString());
+        Log.d(kLogTag, "onFetchFailed: Native ad not available. "
+                + adNative.toString());
         if (mCustomEventNativeListener != null) {
             mCustomEventNativeListener.onNativeAdFailed(NativeErrorCode.NETWORK_NO_FILL);
         }
@@ -61,8 +79,8 @@ public class FlurryForwardingNativeAd extends BaseForwardingNativeAd {
     private synchronized void setupNativeAd(FlurryAdNative adNative) {
         if (adNative != null) {
             nativeAd = adNative;
-            FlurryAdNativeAsset coverImageAsset = nativeAd.getAsset("secHqImage");
-            FlurryAdNativeAsset iconImageAsset = nativeAd.getAsset("secHqBrandingLogo");
+            FlurryAdNativeAsset coverImageAsset = nativeAd.getAsset(ASSET_SEC_HQ_IMAGE);
+            FlurryAdNativeAsset iconImageAsset = nativeAd.getAsset(ASSET_SEC_IMAGE);
 
             if (coverImageAsset != null && !TextUtils.isEmpty(coverImageAsset.getValue())) {
                 setMainImageUrl(coverImageAsset.getValue());
@@ -71,26 +89,49 @@ public class FlurryForwardingNativeAd extends BaseForwardingNativeAd {
                 setIconImageUrl(iconImageAsset.getValue());
             }
 
-            setTitle(nativeAd.getAsset("headline").getValue());
-            setText(nativeAd.getAsset("summary").getValue());
+            setTitle(nativeAd.getAsset(ASSET_HEADLINE).getValue());
+            setText(nativeAd.getAsset(ASSET_SUMMARY).getValue());
 
-            //setCallToAction(CALL_TO_ACTION);
+            if(isAppInstallAd()) {
+                // App rating image URL may be null
+                FlurryAdNativeAsset ratingHqImageAsset = nativeAd.getAsset(ASSET_SEC_HQ_RATING_IMG);
+                if (ratingHqImageAsset != null && !TextUtils.isEmpty(ratingHqImageAsset.getValue())) {
+                    addExtra(EXTRA_STAR_RATING_IMG, ratingHqImageAsset.getValue());
+                } else {
+                    FlurryAdNativeAsset ratingImageAsset = nativeAd.getAsset(ASSET_SEC_RATING_IMG);
+                    if (ratingImageAsset != null && !TextUtils.isEmpty(ratingImageAsset.getValue())) {
+                        addExtra(EXTRA_STAR_RATING_IMG, ratingImageAsset.getValue());
+                    }
+                }
+
+                FlurryAdNativeAsset appCategoryAsset = nativeAd.getAsset(ASSET_APP_CATEGORY);
+                if (appCategoryAsset != null) {
+                    addExtra(EXTRA_APP_CATEGORY, appCategoryAsset.getValue());
+                }
+                FlurryAdNativeAsset appRatingAsset = nativeAd.getAsset(ASSET_APP_RATING);
+                if(appRatingAsset != null) {
+                    setStarRating(getStarRatingValue(appRatingAsset.getValue()));
+                }
+            }
+
+            FlurryAdNativeAsset ctaAsset = nativeAd.getAsset(CALL_TO_ACTION);
+            if(ctaAsset != null){
+                setCallToAction(ctaAsset.getValue());
+            }
+
             setImpressionMinTimeViewed(IMPRESSION_VIEW_MIN_TIME);
-            setOverridingClickTracker(true);
-            setOverridingImpressionTracker(true);
 
             if (getImageUrls() == null || getImageUrls().isEmpty()) {
                 Log.d(kLogTag, "preCacheImages: No images to cache. Flurry Ad Native: " + nativeAd.toString());
-                mCustomEventNativeListener.onNativeAdLoaded(mFlurryForwardingNativeAd);
+                mCustomEventNativeListener.onNativeAdLoaded(mFlurryStaticNativeAd);
             } else {
-                preCacheImages(mContext, getImageUrls(), new CustomEventNative.ImageListener() {
+                NativeImageHelper.preCacheImages(mContext, getImageUrls(), new NativeImageHelper.ImageListener() {
                     @Override
                     public void onImagesCached() {
                         if (mCustomEventNativeListener != null) {
                             Log.d(kLogTag, "preCacheImages: Ad image cached.");
-                            mCustomEventNativeListener.onNativeAdLoaded(mFlurryForwardingNativeAd);
-                        }
-                        else{
+                            mCustomEventNativeListener.onNativeAdLoaded(mFlurryStaticNativeAd);
+                        } else {
                             Log.d(kLogTag, "Unable to notify cache failure: CustomEventNativeListener is null.");
                         }
                     }
@@ -98,10 +139,9 @@ public class FlurryForwardingNativeAd extends BaseForwardingNativeAd {
                     @Override
                     public void onImagesFailedToCache(NativeErrorCode errorCode) {
                         if (mCustomEventNativeListener != null) {
-                            Log.d(kLogTag, "preCacheImages: Unable to cache Ad image. Error[" + errorCode.toString()+ "]");
+                            Log.d(kLogTag, "preCacheImages: Unable to cache Ad image. Error[" + errorCode.toString() + "]");
                             mCustomEventNativeListener.onNativeAdFailed(errorCode);
-                        }
-                        else{
+                        } else {
                             Log.d(kLogTag, "Unable to notify cache failure: CustomEventNativeListener is null.");
                         }
                     }
@@ -130,19 +170,40 @@ public class FlurryForwardingNativeAd extends BaseForwardingNativeAd {
         return imageUrls;
     }
 
+    private Double getStarRatingValue(@Nullable String appRatingString) {
+        // App rating String should be of the form X/Y. E.g. 80/100
+        Double rating = null;
+        if (appRatingString != null) {
+            String[] ratingParts = appRatingString.split("/");
+            if (ratingParts.length == 2) {
+                try {
+                    float numer = Integer.valueOf(ratingParts[0]);
+                    float denom = Integer.valueOf(ratingParts[1]);
+                    rating = (numer / denom) * MOPUB_STAR_RATING_SCALE;
+                } catch (NumberFormatException e) { /*Ignore and return null*/ }
+            }
+        }
+        return rating;
+    }
+
+    private boolean isAppInstallAd() {
+        return nativeAd.getAsset(ASSET_SEC_RATING_IMG) != null || nativeAd.getAsset(ASSET_SEC_HQ_RATING_IMG) != null
+                || nativeAd.getAsset(ASSET_APP_CATEGORY) != null;
+    }
+
     // BaseForwardingNativeAd
     @Override
-    public void prepare(final View view) {
+    public void prepare(@NonNull final View view) {
         super.prepare(view);
         nativeAd.setTrackingView(view);
         Log.d(kLogTag, "prepare(" + nativeAd.toString() + " " + view.toString() + ")");
     }
 
     @Override
-    public void clear(@Nullable View view) {
+    public void clear(@NonNull View view) {
         super.clear(view);
         nativeAd.removeTrackingView();
-        Log.d(kLogTag, "clear("+ nativeAd.toString() + " " + view.toString() + ")");
+        Log.d(kLogTag, "clear("+ nativeAd.toString() + ")");
     }
 
     @Override
@@ -159,14 +220,14 @@ public class FlurryForwardingNativeAd extends BaseForwardingNativeAd {
         @Override
         public void onFetched(FlurryAdNative adNative) {
             Log.d(kLogTag, "onFetched(" +adNative.toString() + ") Successful.");
-            mFlurryForwardingNativeAd.onFetched(adNative);
+            mFlurryStaticNativeAd.onFetched(adNative);
         }
 
         @Override
         public void onError(FlurryAdNative adNative, FlurryAdErrorType adErrorType, int errorCode) {
             if (adErrorType.equals(FlurryAdErrorType.FETCH)) {
                 Log.d(kLogTag, "onError(" + adNative.toString() + ", " + adErrorType.toString() +","+ errorCode + ")");
-                mFlurryForwardingNativeAd.onFetchFailed(adNative);
+                mFlurryStaticNativeAd.onFetchFailed(adNative);
             }
         }
 
@@ -195,6 +256,16 @@ public class FlurryForwardingNativeAd extends BaseForwardingNativeAd {
         @Override
         public void onAppExit(FlurryAdNative adNative) {
             Log.d(kLogTag, "onAppExit(" + adNative.toString() + ")");
+        }
+
+        @Override
+        public void onCollapsed(FlurryAdNative adNative) {
+            Log.d(kLogTag, "onCollapsed(" + adNative.toString() + ")");
+        }
+
+        @Override
+        public void onExpanded(FlurryAdNative adNative) {
+            Log.d(kLogTag, "onExpanded(" + adNative.toString() + ")");
         }
     };
 }

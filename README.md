@@ -1,5 +1,7 @@
-Android Integration Sample
-==========================
+[![Build Status](https://travis-ci.org/flurry/android-AdIntegrationSamples.svg?branch=master)](https://travis-ci.org/flurry/android-AdIntegrationSamples)
+
+Android Ad Integration Sample
+============================
 
 Detailed integration instructions are available on [Flurry Getting Started](https://developer.yahoo.com/flurry/docs/analytics/gettingstarted/android/)
 and [Flurry Android Publisher](https://developer.yahoo.com/flurry/docs/publisher/code/android/) pages.

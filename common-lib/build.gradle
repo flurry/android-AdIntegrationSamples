@@ -1,3 +1,0 @@
-configurations.create("default")
-artifacts.add("default", file('FlurryAnalytics-6.1.0.jar'))
-artifacts.add("default", file('FlurryAds-6.1.0.jar'))

@@ -1,21 +1,25 @@
 package com.flurry.sample.mopub;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.mopub.nativeads.MoPubAdAdapter;
 import com.mopub.nativeads.MoPubAdRenderer;
 import com.mopub.nativeads.MoPubNativeAdPositioning;
-import com.mopub.nativeads.MoPubNativeAdRenderer;
+import com.mopub.nativeads.MoPubStaticNativeAdRenderer;
 import com.mopub.nativeads.ViewBinder;
 
 import java.util.Arrays;
 
-public class MopubNativeActivity extends ActionBarActivity {
+public class MopubNativeActivity extends AppCompatActivity {
 
     MoPubAdAdapter mAdAdapter;
+
+    public static final String INVALID_MOPUB_NATIVE_AD_UNIT_ID = "MOPUB_NATIVE_AD_UNIT_ID";
+    // FIXME: Replace the MoPub ad unit IDs below with your app's valid ad units
+    public static final String MOPUB_NATIVE_AD_UNIT_ID = INVALID_MOPUB_NATIVE_AD_UNIT_ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +33,7 @@ public class MopubNativeActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
 
-        mAdAdapter.loadAds("YOUR_MOPUB_NATIVE_AD_UNIT_ID");
+        mAdAdapter.loadAds(MOPUB_NATIVE_AD_UNIT_ID);
     }
 
     private void setupStreamAds() {
@@ -40,7 +44,7 @@ public class MopubNativeActivity extends ActionBarActivity {
                 .textId(R.id.native_ad_text)
                 .build();
 
-        MoPubAdRenderer mAdRenderer = new MoPubNativeAdRenderer(mViewBinder);
+        MoPubAdRenderer mAdRenderer = new MoPubStaticNativeAdRenderer(mViewBinder);
         MoPubNativeAdPositioning.MoPubClientPositioning mAdPositioning =
                 MoPubNativeAdPositioning.clientPositioning()
                 .addFixedPosition(2)

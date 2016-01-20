@@ -1,8 +1,9 @@
 package com.flurry.sample.mopub;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,9 +19,14 @@ import com.mopub.mobileads.MoPubView;
 
 import java.util.Arrays;
 
-public class MainActivity extends ActionBarActivity
+public class MainActivity extends AppCompatActivity
         implements MoPubInterstitial.InterstitialAdListener, MoPubView.BannerAdListener {
 
+    public static final String INVALID_MOPUB_INTERSTITIAL_AD_UNIT_ID = "MOPUB_INTERSTITIAL_AD_UNIT_ID";
+    public static final String INVALID_MOPUB_BANNER_AD_UNIT_ID = "MOPUB_BANNER_AD_UNIT_ID";
+    // FIXME: Replace the MoPub ad unit IDs below with your app's valid ad units
+    public static final String MOPUB_INTERSTITIAL_AD_UNIT_ID = INVALID_MOPUB_INTERSTITIAL_AD_UNIT_ID;
+    public static final String MOPUB_BANNER_AD_UNIT_ID = INVALID_MOPUB_BANNER_AD_UNIT_ID;
     private MoPubInterstitial mInterstitial;
     private MoPubView mBanner;
     private ListView mListView;
@@ -62,10 +68,24 @@ public class MainActivity extends ActionBarActivity
             }
         });
 
-        mInterstitial = new MoPubInterstitial(this, "YOUR_MOPUB_INTERSTITIAL_AD_UNIT_ID");
+
+        if (MOPUB_BANNER_AD_UNIT_ID == INVALID_MOPUB_BANNER_AD_UNIT_ID ||
+                MOPUB_INTERSTITIAL_AD_UNIT_ID == INVALID_MOPUB_INTERSTITIAL_AD_UNIT_ID) {
+            View rootView = findViewById(R.id.root_view);
+            final Snackbar warningSnackBar = Snackbar.make(rootView,
+                    "No MoPub ad unit IDs set. Add your ad unit IDs in code.",
+                    Snackbar.LENGTH_INDEFINITE)
+                    .setAction("DISMISS", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) { }
+                    });
+            warningSnackBar.show();
+        }
+
+        mInterstitial = new MoPubInterstitial(this, MOPUB_INTERSTITIAL_AD_UNIT_ID);
         mInterstitial.setInterstitialAdListener(this);
         mBanner = (MoPubView)findViewById(R.id.mopub_banner);
-        mBanner.setAdUnitId("YOUR_MOPUB_BANNER_AD_UNIT_ID");
+        mBanner.setAdUnitId(MOPUB_BANNER_AD_UNIT_ID);
         mBanner.setBannerAdListener(this);
     }
 

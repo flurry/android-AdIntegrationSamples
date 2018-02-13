@@ -8,6 +8,9 @@ and [Flurry Android Publisher](https://developer.yahoo.com/flurry/docs/publisher
 
 This sample shows a number of modules that integrate various ad types from Flurry. All you need to get started is to put in your ad space and API key where necessary.
 
+When cloning this repo please use the following:
+git clone --recursive git@github.com:flurry/android-AdIntegrationSamples.git
+
 For further help and information, please check out the [Flurry Documentations](https://developer.yahoo.com/flurry) or contact [Flurry Support](mailto:support@flurry.com).
 
 ## Copyright

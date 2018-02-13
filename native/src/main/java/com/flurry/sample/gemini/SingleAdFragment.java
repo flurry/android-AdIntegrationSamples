@@ -37,6 +37,8 @@ public class SingleAdFragment extends BaseAdFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_single_ad, container, false);
 
+        final View adLayout = rootView.findViewById(R.id.ad_layout);
+        
         final TextView adSourceTxt = (TextView)rootView.findViewById(R.id.ad_source);
         final TextView adHeadlineTxt = (TextView)rootView.findViewById(R.id.ad_headline);
         final TextView adDescription = (TextView)rootView.findViewById(R.id.ad_description);
@@ -93,6 +95,8 @@ public class SingleAdFragment extends BaseAdFragment {
                     mFlurryAdNative.getAsset(AD_ASSET_SEC_HQ_RATING_IMAGE).loadAssetIntoView(adAppRatingImg);
                 }
 
+                mFlurryAdNative.setTrackingView(adLayout);
+                
                 renderAdBtn.setEnabled(false);
             }
         });

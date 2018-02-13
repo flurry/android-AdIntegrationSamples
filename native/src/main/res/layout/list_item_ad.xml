@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="1dp"
     android:padding="10dp"
+    android:id="@+id/ad_layout"
     android:clipToPadding="false">
 
     <TextView
